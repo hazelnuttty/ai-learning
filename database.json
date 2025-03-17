@@ -1,0 +1,21 @@
+[
+    { "question": "halo", "answer": "Halo! Apa kabar?" },
+    { "question": "siapa namamu", "answer": "Namaku Lan AI!" },
+    { "question": "berapa 2+2", "answer": "Hasilnya adalah 4." },
+    { "question": "ceritakan lelucon", "answer": "Kenapa ayam nyebrang jalan? Karena dia mau ke seberang!" },
+    { "question": "siapa presiden indonesia sekarang", "answer": "Presiden Indonesia saat ini adalah Joko Widodo." },
+    { "question": "apa itu HTML", "answer": "HTML adalah bahasa markup yang digunakan untuk membuat halaman web." },
+    { "question": "apa fungsi javascript", "answer": "JavaScript digunakan untuk menambahkan interaktivitas ke halaman web." },
+    { "question": "siapa yang menciptakan komputer", "answer": "Komputer modern pertama dikembangkan oleh Charles Babbage." },
+    { "question": "bagaimana cara membuat website", "answer": "Kamu bisa menggunakan HTML, CSS, dan JavaScript untuk membuat website." },
+    { "question": "siapa penemu listrik", "answer": "Benjamin Franklin terkenal dengan eksperimen listriknya, tetapi Michael Faraday dan Nikola Tesla juga banyak berkontribusi." },
+    { "question": "siapa pencipta facebook", "answer": "Facebook diciptakan oleh Mark Zuckerberg pada tahun 2004." },
+    { "question": "berapa kecepatan cahaya", "answer": "Kecepatan cahaya sekitar 299.792.458 meter per detik di vakum." },
+    { "question": "bagaimana cara install python", "answer": "Kamu bisa mengunduhnya dari https://www.python.org dan mengikuti petunjuk instalasi." },
+    { "question": "apa itu AI", "answer": "AI (Artificial Intelligence) adalah kecerdasan buatan yang dibuat oleh manusia untuk menyelesaikan tugas tertentu." },
+    { "question": "bagaimana cara kerja internet", "answer": "Internet bekerja dengan menghubungkan berbagai komputer di seluruh dunia melalui protokol komunikasi seperti HTTP dan TCP/IP." },
+    { "question": "apa itu VPN", "answer": "VPN (Virtual Private Network) adalah layanan yang melindungi privasi dengan mengenkripsi koneksi internet kamu." },
+    { "question": "apa manfaat olahraga", "answer": "Olahraga dapat meningkatkan kesehatan jantung, memperkuat otot, dan meningkatkan suasana hati." },
+    { "question": "bagaimana cara menabung dengan baik", "answer": "Buat anggaran, sisihkan sebagian pendapatan, dan hindari pengeluaran yang tidak perlu." },
+    { "question": "bagaimana cara belajar programming", "answer": "Mulailah dengan bahasa pemrograman dasar seperti Python atau JavaScript dan praktikkan dengan membuat proyek kecil." }
+]
