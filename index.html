@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>https://lanAI.com</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1e1e1e;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+            overflow-y: auto;
+        }
+        .message {
+            max-width: 80%;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 5px 0;
+            display: flex;
+            flex-direction: column;
+        }
+        .message.ai {
+            background-color: #333;
+            align-self: flex-start;
+            text-align: left;
+        }
+        .message.user {
+            background-color: #007bff;
+            align-self: flex-end;
+            text-align: right;
+        }
+        .message .sender {
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 3px;
+        }
+        .input-container {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background-color: #1e1e1e;
+            border-top: 1px solid #444;
+        }
+        .input-container input {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 20px;
+            background-color: #333;
+            color: white;
+            outline: none;
+        }
+        .input-container button {
+            margin-left: 5px;
+            padding: 12px 15px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            font-weight: bold;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .input-container button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container" id="chatContainer">
+        <div class="message ai">
+            <div class="sender">Lan Ai</div>
+            <div>Halo! Aku lanai asisten pribadi mu.</div>
+        </div>
+    </div>
+    <div class="input-container">
+        <input type="text" id="chatInput" placeholder="Tulis pesan..." onkeypress="handleKeyPress(event)">
+        <button id="sendButton" onclick="sendMessage()">➤</button>
+    </div>
+    <script>
+        let database = [];
+        let blockedWords = [];
+
+        async function loadDatabase() {
+            try {
+                let response = await fetch('database.json');
+                database = await response.json();
+            } catch (error) {
+                console.error("Gagal memuat database:", error);
+            }
+        }
+
+        async function loadBlockedWords() {
+            try {
+                let response = await fetch('blocked_words.json');
+                blockedWords = await response.json();
+            } catch (error) {
+                console.error("Gagal memuat daftar kata yang diblokir:", error);
+            }
+        }
+
+        function checkBlockedWords(input) {
+            for (let wordObj of blockedWords) {
+                if (input.toLowerCase().includes(wordObj.word)) {
+                    return wordObj.response;
+                }
+            }
+            return null;
+        }
+
+        function findBestMatch(input) {
+            let bestMatch = null;
+            let highestSimilarity = 0;
+
+            database.forEach(data => {
+                let similarity = getSimilarity(input.toLowerCase(), data.question.toLowerCase());
+                if (similarity > highestSimilarity) {
+                    highestSimilarity = similarity;
+                    bestMatch = data;
+                }
+            });
+
+            return bestMatch && highestSimilarity >= 0.5 ? bestMatch.answer : null;
+        }
+
+        function getSimilarity(str1, str2) {
+            let words1 = str1.split(" ");
+            let words2 = str2.split(" ");
+            let commonWords = words1.filter(word => words2.includes(word));
+            return commonWords.length / Math.max(words1.length, words2.length);
+        }
+
+        function sendMessage() {
+            let input = document.getElementById("chatInput");
+            let message = input.value.trim();
+            if (message === "") return;
+
+            let chatContainer = document.getElementById("chatContainer");
+
+            let userMessage = document.createElement("div");
+            userMessage.classList.add("message", "user");
+            userMessage.innerHTML = `<div class="sender">User</div><div>${message}</div>`;
+            chatContainer.appendChild(userMessage);
+
+            input.value = "";
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+
+            let aiReply = checkBlockedWords(message);
+            if (!aiReply) {
+                if (message.toLowerCase().startsWith("cari gambar ")) {
+                    let searchQuery = message.replace("cari gambar ", "").trim();
+                    aiReply = `Berikut gambar yang aku temukan: <br> <img src="https://www.google.com/search?tbm=isch&q=${encodeURIComponent(searchQuery)}" style="max-width: 100%;">`;
+                } else if (message.toLowerCase().startsWith("cari info ")) {
+                    let searchQuery = message.replace("cari info ", "").trim();
+                    aiReply = `Kamu bisa menemukan informasinya di <a href="https://www.google.com/search?q=${encodeURIComponent(searchQuery)}" target="_blank">Google</a>.`;
+                } else {
+                    aiReply = findBestMatch(message) || "Maaf, aku belum tahu jawabannya. Aku akan mencari nya lewat database!";
+                }
+            }
+
+            let aiMessage = document.createElement("div");
+            aiMessage.classList.add("message", "ai");
+            aiMessage.innerHTML = `<div class="sender">Lan Ai</div><div>${aiReply}</div>`;
+            chatContainer.appendChild(aiMessage);
+
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === "Enter") {
+                sendMessage();
+            }
+        }
+
+        loadDatabase();
+        loadBlockedWords();
+    </script>
+</body>
+</html>
